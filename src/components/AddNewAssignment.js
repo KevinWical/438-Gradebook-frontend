@@ -12,7 +12,8 @@ class AddNewAssignment extends React.Component {
         super(props);
         this.state = {
             assignmentName: '',
-            dueDate: '',   
+            dueDate: '',
+            courseId: '', 
         };
     };
 
@@ -31,11 +32,11 @@ class AddNewAssignment extends React.Component {
     handleFormSubmit = (event) => {
         event.preventDefault();
 
-        const { assignmentName, dueDate } = this.state;
+        const { assignmentName, dueDate, courseId } = this.state;
         // need to add + import {BACKEND_URL} to constants.js
         // also need to get the courseId from the getCourses method
         // to pass into this URL, it is hardcoded to the course with id 123456 for now
-        fetch('http://localhost:8081/gradebook/123456', {
+        fetch('http://localhost:8081/gradebook', {
             method: 'POST',
             headers: {
             'Content-Type': 'application/json',
@@ -43,6 +44,7 @@ class AddNewAssignment extends React.Component {
             body: JSON.stringify({
             assignmentName,
             dueDate,
+            courseId,
             }),
         })
             .then((response) => {
@@ -61,11 +63,12 @@ class AddNewAssignment extends React.Component {
             this.setState({
                 assignmentName: '',
                 dueDate: '',
+                courseId: '',
             });
 
     };
 
-    handleImputChange = event => {
+    handleInputChange = (event) => {
         this.setState({
             [event.target.name]: event.target.value,
         });
@@ -73,7 +76,7 @@ class AddNewAssignment extends React.Component {
 
     render() {
 
-        const { assignmentName, dueDate } = this.state;
+        const { assignmentName, dueDate, courseId } = this.state;
 
         return (
             <div align="left" style={{margin: 10}}>
@@ -86,7 +89,7 @@ class AddNewAssignment extends React.Component {
                         name="assignmentName"
                         value={assignmentName}
                         required
-                        onChange={this.handleImputChange}
+                        onChange={this.handleInputChange}
                     /><br />
 
                     <label htmlFor="duedate">Due Date:</label><br />
@@ -97,20 +100,21 @@ class AddNewAssignment extends React.Component {
                         placeholder="YYYY-MM-DD"
                         value={dueDate}
                         required
-                        onChange={this.handleImputChange}
+                        onChange={this.handleInputChange}
                     /><br />
 
-                    <label htmlFor="cname">Course ID:</label><br />
+                    <label htmlFor="cID">Course ID:</label><br />
                     <input
                         type="text"
-                        id="cname"
-                        name="cname"
-                        value={123456}
-                        placeholder='cst438-software engineering'
-                        readOnly
+                        id="cID"
+                        name="courseId"
+                        value={courseId}
+                        placeholder='123456'
+                        onChange={this.handleInputChange}
+                        required
                     /><br /><br />
 
-                <button type="submit">Add New Assignment</button>
+                <button id='submit' type="submit">Add New Assignment</button>
                 </form>
 
                 <Link to="/">Back to Assignment List</Link>
@@ -121,48 +125,3 @@ class AddNewAssignment extends React.Component {
 }
 
 export default AddNewAssignment;
-
-// Assignment name, due date and course
-
-/*
-                <form>
-                <label for="aname">Assignment Name:</label><br></br>
-                <input type="text" id="aname" name="aname" required></input> <br></br>
-
-                <label for="duedate">Due Date:</label><br></br>
-                <input type="date" id="duedate" name="duedate" placeholder='YYYY-MM-DD' required></input> <br></br>
-
-                <label for="cname">Course Name:</label><br></br>
-                <input type="text" id="cname" name="cname" required></input> <br></br><br></br><br></br>
-                   
-                    <Button component={Link} to={{pathname:'/'}} 
-                        variant='outlined' color='primary'>
-                    Add New Assignment
-                    </Button>
-                </form>
-
-
-                        try {
-            // need to add + import {BACKEND_URL} to constants.js
-            // also need to get the courseId from the getCourses method
-            // to pass into this URL, it is hardcoded to the course with id 123456 for now
-            const response = fetch(`http://localhost:8081/gradebook/123456`,
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newAssignment),
-
-            });
-            // I am not getting an OK response
-            console.log("response: ", response);
-            if(response.ok){
-                console.log('Assignment added successfully');
-            } else {
-                console.error('Failed to add assignment:', response.status, response.statusText);
-            }
-        } catch (error) {
-            console.error('Error submitting form data', error);
-        }
-*/
