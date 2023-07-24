@@ -123,5 +123,4 @@ class AddNewAssignment extends React.Component {
     }
 
 }
-
 export default AddNewAssignment;
